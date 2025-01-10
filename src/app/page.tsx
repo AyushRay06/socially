@@ -12,7 +12,6 @@ export default function Home() {
       <SignedIn>
         <UserButton />
       </SignedIn>
-      <ModeToggle />
     </div>
   )
 }

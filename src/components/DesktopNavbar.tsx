@@ -32,6 +32,7 @@ async function DesktopNavbar() {
           </Button>
           <Button variant="ghost" className="flex items-center gap-2" asChild>
             <Link
+            // for the path to the profile page, we check if the user has a username, if not we use the first part of the email address
               href={`/profile/${
                 user.username ??
                 user.emailAddresses[0].emailAddress.split("@")[0]
