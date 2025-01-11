@@ -1,4 +1,4 @@
-// import { getUserByClerkId } from "@/actions/user.action"
+// import { getUserByClerkId } from "@/actions/user.action" //Server action File👈
 
 import { currentUser } from "@clerk/nextjs/server"
 import { SignInButton, SignUpButton } from "@clerk/nextjs"

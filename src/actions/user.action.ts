@@ -4,7 +4,7 @@
 import prisma from "@/lib/prisma"
 import { auth, currentUser } from "@clerk/nextjs/server"
 //we are calling the syncUser() to save the user data from clerk to postgresh
-//we are calling the syncUser() in Navbar 
+//we are calling the syncUser() in Navbar
 export async function syncUser() {
   try {
     //Get the userId and user from clerk
@@ -42,4 +42,22 @@ export async function syncUser() {
   } catch (error) {
     console.log("Error in syncUser", error)
   }
+}
+
+export async function getUserByClerkId(clerkId: string) {
+  return prisma.user.findUnique({
+    where: {
+      clerkId,
+    },
+    //for related data use include
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          posts: true,
+        },
+      },
+    },
+  })
 }
