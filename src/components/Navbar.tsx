@@ -7,7 +7,7 @@ import { syncUser } from "@/actions/user.action"
 async function Navbar() {
   //Get the current user from Clerk
   const user = await currentUser()
-    if (user) await syncUser() // POST
+    if (user) await syncUser() // POST  Request as it saves user data in the pgsh DB
 
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">

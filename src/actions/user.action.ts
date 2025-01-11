@@ -1,4 +1,5 @@
 "use server"
+//RUns on the server
 
 import prisma from "@/lib/prisma"
 import { auth, currentUser } from "@clerk/nextjs/server"
