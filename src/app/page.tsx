@@ -1,6 +1,13 @@
-import ModeToggle from "@/components/ModeToggle"
+import Createpost from "@/components/Createpost"
 import { Button } from "@/components/ui/button"
-import { SignedIn, SignInButton, UserButton, SignedOut } from "@clerk/nextjs"
-export default function Home() {
-  return <div>Main body</div>
+import { currentUser } from "@clerk/nextjs/server"
+
+export default async function Home() {
+  const user = await currentUser()
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
+      <div>{user ? <Createpost /> : null}</div>
+    </div>
+  )
 }

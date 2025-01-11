@@ -61,3 +61,18 @@ export async function getUserByClerkId(clerkId: string) {
     },
   })
 }
+
+//This function helps us fetch ClerkId and then use ClerkId in getUserBtClerkId to
+//to get the user Id in the postgresh DB so that we can use the actal DB ID rather than clerk's
+
+export async function getDbUserId() {
+  //Destructuring and Renaming userId as clerkId
+  const { userId: clerkId } = await auth()
+
+  if (!clerkId) return null
+  const user = await getUserByClerkId(clerkId)
+
+  if (!user) throw new Error("User not found")
+
+  return user.id
+}
