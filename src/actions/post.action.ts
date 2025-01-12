@@ -17,6 +17,7 @@ export async function createPost(content: string, image: string) {
     })
 
     revalidatePath("/") //delete the cache from the target page
+    return { success: true, post }
   } catch (error) {
     console.error("Failed to create post:", error)
     return { success: false, error: "Failed to create post" }

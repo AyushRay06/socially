@@ -3,6 +3,7 @@
 
 import prisma from "@/lib/prisma"
 import { auth, currentUser } from "@clerk/nextjs/server"
+import { revalidatePath } from "next/cache"
 //we are calling the syncUser() to save the user data from clerk to postgresh
 //we are calling the syncUser() in Navbar
 export async function syncUser() {
@@ -75,4 +76,110 @@ export async function getDbUserId() {
   if (!user) throw new Error("User not found")
 
   return user.id
+}
+
+export async function getRandomUsers() {
+  try {
+    const userId = await getDbUserId()
+
+    if (!userId) return []
+    //Get Three random users
+    const randomUsers = await prisma.user.findMany({
+      where: {
+        //AND is used to apply 2 condition
+        //1 not the self user(current user itself)
+        //not the users that the current user alreay follows
+        AND: [
+          { NOT: { id: userId } },
+          {
+            NOT: {
+              followers: {
+                some: {
+                  followerId: userId,
+                },
+              },
+            },
+          },
+        ],
+      },
+      //seleting the fields that we need from the users
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        _count: {
+          select: {
+            followers: true,
+          },
+        },
+      },
+      //signifies that we need 3 users
+      take: 3,
+    })
+    return randomUsers
+  } catch (error) {
+    console.log("Error In getTRandomUser!!!:", error)
+    return []
+  }
+}
+
+export async function toggleFollow(targetUserId: string) {
+  try {
+    const userId = await getDbUserId()
+    if (!userId) return
+
+    if (userId === targetUserId) throw new Error("You cannot follow yourself")
+
+    const existingFollow = await prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: userId,
+          followingId: targetUserId,
+        },
+      },
+    })
+
+    if (existingFollow) {
+      //unfollow
+      await prisma.follows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId: targetUserId,
+          },
+        },
+      })
+    } else {
+      //follow
+
+      //Definition: $transaction in Prisma allows you to perform
+      //multiple database operations atomically. This means either all
+      //operations succeed together, or none of them are applied if
+      //any of them fail.
+      //In this case we create the follower & craete notification
+      await prisma.$transaction([
+        prisma.follows.create({
+          data: {
+            followerId: userId,
+            followingId: targetUserId,
+          },
+        }),
+
+        prisma.notification.create({
+          data: {
+            type: "FOLLOW",
+            userId: targetUserId, //user being followed recives the notificatoin
+            creatorId: userId,
+          },
+        }),
+      ])
+    }
+
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    console.log("Error in toggleFollow!!!", error)
+    return { success: false }
+  }
 }
