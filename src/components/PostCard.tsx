@@ -1,6 +1,6 @@
 "use client"
 
-import { createComment, getPosts } from "@/actions/post.action"
+import { createComment, deletePost, getPosts } from "@/actions/post.action"
 import { SignInButton, useUser } from "@clerk/nextjs"
 import { useState } from "react"
 import toast from "react-hot-toast"
@@ -56,6 +56,9 @@ function PostCard({ post, dbUserId }: PostCardProps) {
     if (!newComment.trim() || isCommenting) return
     try {
       setIsCommenting(true)
+
+      //we are using post.id as we get the post as Post datatype which
+      //return a object from scheme
       const result = await createComment(post.id, newComment)
       if (result?.success) {
         toast.success("Comment posted successfully")
@@ -70,6 +73,20 @@ function PostCard({ post, dbUserId }: PostCardProps) {
   }
 
   //----------------------Handle Delete Post------------------
+  const handleDeletePost = async () => {
+    if (isDeleting) return
+    try {
+      setIsDeleting(true)
+      const result = await deletePost(post.id)
+      if (result.success) {
+        toast.success("Post deleted successfully")
+      } else throw new Error(result.error)
+    } catch (error) {
+      toast.error("Failed to delete post")
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
   return <div></div>
 }
