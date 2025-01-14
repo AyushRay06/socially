@@ -2,7 +2,12 @@
 
 import { formatDistanceToNow } from "date-fns"
 
-import { createComment, deletePost, getPosts } from "@/actions/post.action"
+import {
+  createComment,
+  deletePost,
+  getPosts,
+  toggleLike,
+} from "@/actions/post.action"
 
 import { SignInButton, useUser } from "@clerk/nextjs"
 
@@ -46,7 +51,7 @@ function PostCard({ post, dbUserId }: PostCardProps) {
       setIsLiking(true)
       setHasLiked((prev) => !prev)
       setOptmisticLikes((prev) => prev + (hasLiked ? -1 : 1))
-      // await toggleLike(post.id)
+      await toggleLike(post.id)
     } catch (error) {
       setOptmisticLikes(post._count.likes)
       setHasLiked(post.likes.some((like) => like.userId === dbUserId))

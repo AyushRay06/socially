@@ -82,7 +82,7 @@ export async function getPosts() {
 }
 //--------------------Like----------------------------------
 
-export async function toogleLike(postId: string) {
+export async function toggleLike(postId: string) {
   try {
     const userId = await getDbUserId()
     if (!userId) return
