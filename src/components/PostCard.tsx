@@ -1,6 +1,6 @@
 "use client"
 
-import { getPosts } from "@/actions/post.action"
+import { createComment, getPosts } from "@/actions/post.action"
 import { SignInButton, useUser } from "@clerk/nextjs"
 import { useState } from "react"
 import toast from "react-hot-toast"
@@ -33,6 +33,7 @@ function PostCard({ post, dbUserId }: PostCardProps) {
   const [optimisticLikes, setOptmisticLikes] = useState(post._count.likes) //gets teh like no.
   const [showComments, setShowComments] = useState(false)
 
+  //-------------------Handle Like------------------------
   const handleLike = async () => {
     //If to avoid continious press of like button and only register one Like
     if (isLiking) return
@@ -48,6 +49,27 @@ function PostCard({ post, dbUserId }: PostCardProps) {
       setIsLiking(false)
     }
   }
+
+  //---------------------Handle Add Comment----------------
+
+  const handleAddComment = async () => {
+    if (!newComment.trim() || isCommenting) return
+    try {
+      setIsCommenting(true)
+      const result = await createComment(post.id, newComment)
+      if (result?.success) {
+        toast.success("Comment posted successfully")
+        setNewComment("")
+      }
+    } catch (error) {
+      toast.error("Failed to add comment")
+      console.log("Errorr in handleComment!!!:", error)
+    } finally {
+      setIsCommenting(false)
+    }
+  }
+
+  //----------------------Handle Delete Post------------------
 
   return <div></div>
 }
