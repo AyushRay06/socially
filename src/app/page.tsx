@@ -1,7 +1,6 @@
 import { getPosts } from "@/actions/post.action"
 import Createpost from "@/components/Createpost"
 import SuggestedUsers from "@/components/SuggestedUsers"
-import { Button } from "@/components/ui/button"
 import PostCard from "@/components/PostCard"
 import { currentUser } from "@clerk/nextjs/server"
 import { getDbUserId } from "@/actions/user.action"

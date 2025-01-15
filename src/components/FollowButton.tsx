@@ -21,6 +21,7 @@ const FollowButton = ({ userId }: FollowButtonProps) => {
       toast.success("User followed")
     } catch (error) {
       toast.error("Error following user")
+      console.log(error)
     } finally {
       setIsLoading(false)
     }

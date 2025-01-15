@@ -55,6 +55,7 @@ function PostCard({ post, dbUserId }: PostCardProps) {
     } catch (error) {
       setOptmisticLikes(post._count.likes)
       setHasLiked(post.likes.some((like) => like.userId === dbUserId))
+      console.log(error)
     } finally {
       setIsLiking(false)
     }
@@ -93,6 +94,7 @@ function PostCard({ post, dbUserId }: PostCardProps) {
       } else throw new Error(result.error)
     } catch (error) {
       toast.error("Failed to delete post")
+      console.log(error)
     } finally {
       setIsDeleting(false)
     }

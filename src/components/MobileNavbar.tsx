@@ -5,8 +5,6 @@ import {
   HomeIcon,
   LogOutIcon,
   MenuIcon,
-  MoonIcon,
-  SunIcon,
   UserIcon,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -19,7 +17,7 @@ import {
 } from "@/components/ui/sheet"
 import { useState } from "react"
 import { useAuth, SignInButton, SignOutButton } from "@clerk/nextjs"
-import { useTheme } from "next-themes"
+// import { useTheme } from "next-themes"
 import Link from "next/link"
 import ModeToggle from "./ModeToggle"
 
@@ -27,7 +25,7 @@ function MobileNavbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   // we use isSignedIn = nuseAuth() and not currentUser() because currentUser() is a server side function and we are on the client side
   const { isSignedIn } = useAuth()
-  const { theme, setTheme } = useTheme()
+  // const { theme, setTheme } = useTheme()
 
   return (
     <div className="flex md:hidden items-center space-x-2">

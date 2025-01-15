@@ -142,7 +142,9 @@ export async function toggleLike(postId: string) {
 
     revalidatePath("/")
     return { success: true }
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error in ToggleLike.", error)
+  }
 }
 
 //--------------------------Add Comment----------------------------
