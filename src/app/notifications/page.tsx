@@ -20,11 +20,13 @@ type Notification = Notifications[number]
 const getNotificationIcon = (type: string) => {
   switch (type) {
     case "LIKE":
-      return <HeartIcon className="size-4 text-red-500" />
+      return <HeartIcon className="size-4 text-red-500 fill-red-400" />
     case "COMMENT":
-      return <MessageCircleIcon className="size-4 text-blue-500" />
+      return (
+        <MessageCircleIcon className="size-4 text-blue-500 fill-blue-400" />
+      )
     case "FOLLOW":
-      return <UserPlusIcon className="size-4 text-green-500" />
+      return <UserPlusIcon className="size-4 text-green-500 fill-emerald-400" />
     default:
       return null
   }
@@ -58,6 +60,7 @@ function NotificationsPage() {
   return (
     <div className="space-y-4">
       <Card>
+        {/* Card Header NOTIFICATION                n unread */}
         <CardHeader className="border-b">
           <div className="flex items-center justify-between">
             <CardTitle>Notifications</CardTitle>
@@ -66,6 +69,8 @@ function NotificationsPage() {
             </span>
           </div>
         </CardHeader>
+
+        {/* Content ie notifications */}
         <CardContent className="p-0">
           <ScrollArea className="h-[calc(100vh-12rem)]">
             {notifications.length === 0 ? (
@@ -85,6 +90,8 @@ function NotificationsPage() {
                       src={notification.creator.image ?? "/avatar.png"}
                     />
                   </Avatar>
+
+                  {/* Notificationn Descriptionn xyz liked yoy post || xyz commented on your post etc */}
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center gap-2">
                       {getNotificationIcon(notification.type)}
@@ -100,7 +107,7 @@ function NotificationsPage() {
                           : "commented on your post"}
                       </span>
                     </div>
-
+                    {/* specific post info post */}
                     {notification.post &&
                       (notification.type === "LIKE" ||
                         notification.type === "COMMENT") && (
